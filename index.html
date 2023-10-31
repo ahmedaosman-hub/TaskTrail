@@ -19,7 +19,10 @@
         <div id="categories-section">
           <ul id="list-categories">
           </ul>
-          <button id="new-category-btn" onclick="addNewCategory()">New Category</button>
+          <button id="new-category-btn" class="custom-btn" onclick="addNewCategory()">New Category</button>
+          <button id="delete-category-btn" class="custom-btn" onclick="openDeleteModal()">Delete Category</button>
+
+
         </div>
 
 
@@ -50,6 +53,17 @@
       </div>
     </div>
   </div>
+  <div id="deleteCategoryModal" class="modal">
+    <div class="modal-content">
+      <h3>Delete Category</h3>
+      <select id="delete-category-dropdown"></select>
+      <div class="modal-buttons">
+        <button onclick="closeDeleteModal()">Cancel</button>
+        <button onclick="deleteSelectedCategory()">Delete</button>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 </html>

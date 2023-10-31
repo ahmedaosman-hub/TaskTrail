@@ -205,3 +205,17 @@ ul li span:hover {
     justify-content: space-between;
     margin-top: 10px;
 }
+
+.custom-btn {
+    background-color: #9A8C98;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.custom-btn:hover {
+    background-color: #7A6c78;
+}

@@ -121,3 +121,58 @@ function addCategoryToList(categoryName) {
   };
   ul.appendChild(li);
 }
+
+// Open the delete category modal and populate the dropdown
+function openDeleteModal() {
+  populateDropdown();
+  document.getElementById("deleteCategoryModal").style.display = "flex";
+}
+
+// Close the delete category modal
+function closeDeleteModal() {
+  document.getElementById("deleteCategoryModal").style.display = "none";
+}
+
+// Populate the dropdown with existing categories
+function populateDropdown() {
+  const dropdown = document.getElementById("delete-category-dropdown");
+  const data = loadData();
+
+  // Clear existing options
+  dropdown.innerHTML = "";
+
+  // Populate dropdown with categories
+  for (let categoryName in data) {
+    let option = document.createElement("option");
+    option.value = categoryName;
+    option.textContent = categoryName;
+    dropdown.appendChild(option);
+  }
+}
+
+// Delete the selected category
+function deleteSelectedCategory() {
+  const dropdown = document.getElementById("delete-category-dropdown");
+  const selectedCategory = dropdown.value;
+
+  // Delete from local storage
+  const data = loadData();
+  delete data[selectedCategory];
+  saveData(data);
+
+  // Remove from UI
+  const categoriesList = document.getElementById("list-categories");
+  Array.from(categoriesList.children).forEach((li) => {
+    if (li.textContent === selectedCategory) {
+      li.remove();
+    }
+  });
+
+  // Reset current list if deleted category was being viewed
+  if (currentList === selectedCategory) {
+    currentList = "default";
+    showTask();
+  }
+
+  closeDeleteModal();
+}
