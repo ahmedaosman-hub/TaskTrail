@@ -11,25 +11,29 @@
 
 <body>
   <div class="container">
-    <div class="todo-app">
-      <h2>To-Do List <img src="images/icon.png" /></h2>
+    <div class="app">
+      <h2 class="title">To-Do List <img src="images/icon.png" /></h2>
 
-      <!-- List Categories-->
-      <ul id="list-categories">
-        <li onclick="switchList('cleaning')">Cleaning</li>
-        <li onclick="switchList('car')">Car</li>"
-      </ul>
-      <input type="text" id="list-name" placeholder="Add new list name" />
-      <button onclick="addList()">Add List</button>
+      <div class="todo-app">
+        <!-- List Categories-->
+        <ul id="list-categories">
+          <li onclick="switchList('cleaning')">Cleaning</li>
+          <li onclick="switchList('car')">Car</li>
+        </ul>
 
-      <!-- Tasks of the selected -->
-      <div class="row">
-        <input type="text" id="input-box" placeholder="Add your task" />
-        <button onclick="addTask()">Add</button>
+
+        <div class="vertical-line"></div>
+
+        <!-- Tasks of the selected category -->
+        <div id="tasks-section">
+          <div class="row">
+            <input type="text" id="input-box" placeholder="Add your task" />
+            <button onclick="addTask()">Add</button>
+          </div>
+          <ul id="list-container"></ul>
+        </div>
+
       </div>
-      <ul id="list-container">
-
-      </ul>
     </div>
   </div>
 </body>
