@@ -1,18 +1,26 @@
 const inputBox = document.getElementById("input-box");
 const listContainer = document.getElementById("list-container");
+const listCategories = document.getElementById("list-categories");
+let currentList = "default";
+
+function switchList(listName) {
+  currentList = listName;
+  showTask();
+}
 
 function addTask() {
   if (inputBox.value.trim() === "") {
     alert("Please enter a task.");
     return;
-  } else {
-    let li = document.createElement("li");
-    li.innerHTML = inputBox.value;
-    listContainer.appendChild(li);
-    let span = document.createElement("span");
-    span.innerHTML = "\u00D7";
-    li.appendChild(span);
   }
+
+  let li = document.createElement("li");
+  li.innerHTML = inputBox.value;
+  listContainer.appendChild(li);
+  let span = document.createElement("span");
+  span.innerHTML = "\u00D7";
+  li.appendChild(span);
+
   inputBox.value = "";
   saveData();
 }
@@ -31,12 +39,68 @@ listContainer.addEventListener(
   false
 );
 
-function saveData() {
-  localStorage.setItem("data", listContainer.innerHTML);
-}
-function showTask() {
-  const storedData = localStorage.getItem("data");
-  listContainer.innerHTML = storedData ? storedData : "";
+function addList(listName) {
+  if (!listName) return;
+  const data = loadData();
+
+  if (!data[listName]) {
+    data[listName] = [];
+    saveData(data);
+
+    const li = document.createElement("li");
+    li.textContent = listName.charAt(0).toUpperCase() + listName.slice(1);
+    li.onclick = function () {
+      switchList(listName);
+    };
+    listCategories.appendChild(li);
+  }
 }
 
-showTask();
+function saveData(dataToUpdate) {
+  const data = dataToUpdate || loadData();
+
+  if (!dataToUpdate) {
+    data[currentList] = Array.from(listContainer.children).map(
+      (li) => li.firstChild.textContent
+    );
+  }
+
+  localStorage.setItem("data", JSON.stringify(data));
+}
+
+function loadData() {
+  const storedData = localStorage.getItem("data");
+  return storedData ? JSON.parse(storedData) : {};
+}
+
+function showTask() {
+  listContainer.innerHTML = "";
+  const data = loadData();
+  const tasks = data[currentList] || [];
+
+  tasks.forEach((taskName) => {
+    let li = document.createElement("li");
+    li.innerHTML = taskName;
+
+    let span = document.createElement("span");
+    span.innerHTML = "\u00D7";
+    li.appendChild(span);
+
+    listContainer.appendChild(li);
+  });
+}
+
+(function init() {
+  const data = loadData();
+
+  for (let listName in data) {
+    const li = document.createElement("li");
+    li.textContent = listName.charAt(0).toUpperCase() + listName.slice(1);
+    li.onclick = function () {
+      switchList(listName);
+    };
+    listCategories.appendChild(li);
+  }
+
+  showTask();
+})();

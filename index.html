@@ -13,6 +13,16 @@
   <div class="container">
     <div class="todo-app">
       <h2>To-Do List <img src="images/icon.png" /></h2>
+
+      <!-- List Categories-->
+      <ul id="list-categories">
+        <li onclick="switchList('cleaning')">Cleaning</li>
+        <li onclick="switchList('car')">Car</li>"
+      </ul>
+      <input type="text" id="list-name" placeholder="Add new list name" />
+      <button onclick="addList()">Add List</button>
+
+      <!-- Tasks of the selected list-->
       <div class="row">
         <input type="text" id="input-box" placeholder="Add your task" />
         <button onclick="addTask()">Add</button>
