@@ -152,9 +152,10 @@ ul li span:hover {
 }
 
 .vertical-line {
+    flex-shrink: 0;
     width: 1px;
     background-color: #000;
-    height: auto;
+    height: 100%;
     margin: 0 10px;
 }
 
@@ -204,4 +205,10 @@ ul li span:hover {
 
 .custom-btn:hover {
     background-color: #7A6c78;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
 }
