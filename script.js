@@ -1,13 +1,18 @@
+// Getting reference to DOM elements
 const inputBox = document.getElementById("input-box");
 const listContainer = document.getElementById("list-container");
 const listCategories = document.getElementById("list-categories");
+
+// The currently active list
 let currentList = "default";
 
+// Switch to a different task list
 function switchList(listName) {
   currentList = listName;
   showTask();
 }
 
+// Add a new task to the active list
 function addTask() {
   if (inputBox.value.trim() === "") {
     alert("Please enter a task.");
@@ -17,14 +22,20 @@ function addTask() {
   let li = document.createElement("li");
   li.innerHTML = inputBox.value;
   listContainer.appendChild(li);
+
+  // Add a delete button to the task
   let span = document.createElement("span");
   span.innerHTML = "\u00D7";
   li.appendChild(span);
 
+  // Clear the input box
   inputBox.value = "";
+
+  // Save tasks to local storage
   saveData();
 }
 
+// Event listeners for marking tasks as done and deleting tasks
 listContainer.addEventListener(
   "click",
   function (e) {
@@ -39,9 +50,11 @@ listContainer.addEventListener(
   false
 );
 
+// Save tasks to local storage
 function saveData(dataToUpdate) {
   const data = dataToUpdate || loadData();
 
+  // If there's no data to update, save the current list's tasks
   if (!dataToUpdate) {
     data[currentList] = Array.from(listContainer.children).map(
       (li) => li.firstChild.textContent
@@ -51,11 +64,13 @@ function saveData(dataToUpdate) {
   localStorage.setItem("data", JSON.stringify(data));
 }
 
+// Load tasks from local storage
 function loadData() {
   const storedData = localStorage.getItem("data");
   return storedData ? JSON.parse(storedData) : {};
 }
 
+// Display tasks of the active list
 function showTask() {
   listContainer.innerHTML = "";
   const data = loadData();
@@ -73,6 +88,7 @@ function showTask() {
   });
 }
 
+// Initialization function to populate categories and tasks
 (function init() {
   const data = loadData();
 
@@ -83,14 +99,17 @@ function showTask() {
   showTask();
 })();
 
+// Open the new category modal
 function addNewCategory() {
   document.getElementById("categoryModal").style.display = "flex";
 }
 
+// Close the new category modal
 function closeModal() {
   document.getElementById("categoryModal").style.display = "none";
 }
 
+// Add a new category
 function addCategory() {
   var categoryName = document.getElementById("category-input").value;
   if (categoryName) {
@@ -109,6 +128,7 @@ function addCategory() {
   }
 }
 
+// Add a category to the category list
 function addCategoryToList(categoryName) {
   var ul = document.getElementById("list-categories");
   var li = document.createElement("li");
@@ -119,7 +139,7 @@ function addCategoryToList(categoryName) {
   ul.appendChild(li);
 }
 
-// Open the delete category modal and populate the dropdown
+// Open the delete category modal and populate dropdown with categories
 function openDeleteModal() {
   populateDropdown();
   document.getElementById("deleteCategoryModal").style.display = "flex";
@@ -130,15 +150,12 @@ function closeDeleteModal() {
   document.getElementById("deleteCategoryModal").style.display = "none";
 }
 
-// Populate the dropdown with existing categories
+// Populate dropdown with existing categories
 function populateDropdown() {
   const dropdown = document.getElementById("delete-category-dropdown");
   const data = loadData();
 
-  // Clear existing options
   dropdown.innerHTML = "";
-
-  // Populate dropdown with categories
   for (let categoryName in data) {
     let option = document.createElement("option");
     option.value = categoryName;
@@ -152,12 +169,12 @@ function deleteSelectedCategory() {
   const dropdown = document.getElementById("delete-category-dropdown");
   const selectedCategory = dropdown.value;
 
-  // Delete from local storage
+  // Remove category from local storage
   const data = loadData();
   delete data[selectedCategory];
   saveData(data);
 
-  // Remove from UI
+  // Remove category from the category list
   const categoriesList = document.getElementById("list-categories");
   Array.from(categoriesList.children).forEach((li) => {
     if (li.textContent === selectedCategory) {
@@ -165,7 +182,7 @@ function deleteSelectedCategory() {
     }
   });
 
-  // Reset current list if deleted category was being viewed
+  // Switch to default list if deleted category was active
   if (currentList === selectedCategory) {
     currentList = "default";
     showTask();
