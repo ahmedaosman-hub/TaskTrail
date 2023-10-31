@@ -164,20 +164,6 @@ ul li span:hover {
     align-items: flex-start;
 }
 
-#new-category-btn {
-    margin-top: 10px;
-    background-color: #9A8C98;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background-color 0.;
-}
-
-#new-category-btn:hover {
-    background-color: #7A6c78;
-}
 
 .modal {
     display: none;

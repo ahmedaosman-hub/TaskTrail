@@ -79,9 +79,6 @@ function showTask() {
   for (let categoryName in data) {
     addCategoryToList(categoryName);
   }
-  for (let listName in data) {
-    addCategoryToList(listName);
-  }
 
   showTask();
 })();
