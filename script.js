@@ -87,3 +87,26 @@ function showTask() {
 
   showTask();
 })();
+
+function addNewCategory() {
+  document.getElementById("categoryModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("categoryModal").style.display = "none";
+}
+
+function addCategory() {
+  var categoryName = document.getElementById("category-input").value;
+  if (categoryName) {
+    var ul = document.getElementById("list-categories");
+    var li = document.createElement("li");
+    li.textContent = categoryName;
+    ul.appendChild(li);
+
+    document.getElementById("category-input").value = "";
+    closeModal();
+  } else {
+    alert("Please enter a category name.");
+  }
+}

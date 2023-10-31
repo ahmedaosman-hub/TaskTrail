@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>What do I have to do today?</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="script.js" defer></script>
+  <script src="script.js"></script>
 </head>
 
 <body>
@@ -36,6 +36,18 @@
           </div>
           <ul id="list-container"></ul>
         </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="categoryModal" class="modal">
+    <div class="modal-content">
+      <h3>New Category</h3>
+      <input type="text" id="category-input" placeholder="Category Name" />
+      <div class="modal-buttons">
+        <button onclick="closeModal()">Cancel</button>
+        <button onclick="addCategory()">OK</button>
 
       </div>
     </div>
