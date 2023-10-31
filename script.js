@@ -76,13 +76,11 @@ function showTask() {
 (function init() {
   const data = loadData();
 
+  for (let categoryName in data) {
+    addCategoryToList(categoryName);
+  }
   for (let listName in data) {
-    const li = document.createElement("li");
-    li.textContent = listName.charAt(0).toUpperCase() + listName.slice(1);
-    li.onclick = function () {
-      switchList(listName);
-    };
-    listCategories.appendChild(li);
+    addCategoryToList(listName);
   }
 
   showTask();
@@ -99,14 +97,27 @@ function closeModal() {
 function addCategory() {
   var categoryName = document.getElementById("category-input").value;
   if (categoryName) {
-    var ul = document.getElementById("list-categories");
-    var li = document.createElement("li");
-    li.textContent = categoryName;
-    ul.appendChild(li);
+    addCategoryToList(categoryName);
+
+    const data = loadData();
+    if (!data[categoryName]) {
+      data[categoryName] = [];
+      saveData(data);
+    }
 
     document.getElementById("category-input").value = "";
     closeModal();
   } else {
     alert("Please enter a category name.");
   }
+}
+
+function addCategoryToList(categoryName) {
+  var ul = document.getElementById("list-categories");
+  var li = document.createElement("li");
+  li.textContent = categoryName;
+  li.onclick = function () {
+    switchList(categoryName);
+  };
+  ul.appendChild(li);
 }

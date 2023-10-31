@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>What do I have to do today?</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </head>
 
 <body>
@@ -18,8 +18,6 @@
         <!-- List Categories-->
         <div id="categories-section">
           <ul id="list-categories">
-            <li onclick="switchList('cleaning')">Cleaning</li>
-            <li onclick="switchList('car')">Car</li>
           </ul>
           <button id="new-category-btn" onclick="addNewCategory()">New Category</button>
         </div>
