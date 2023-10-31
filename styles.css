@@ -5,17 +5,16 @@
     box-sizing: border-box;
 }
 
-
 body {
     background-color: #080808;
 }
-
 
 .container {
     width: 100%;
     min-height: 100vh;
     padding: 10px;
     background: linear-gradient(135deg, #22223B, #4A4E69);
+    display: flex;
 }
 
 .todo-app {
@@ -25,7 +24,6 @@ body {
     margin: 100px auto 20px;
     padding: 40px 30px 70px;
     border-radius: 10px;
-
 }
 
 .todo-app h2 {
@@ -115,4 +113,66 @@ ul li span {
 
 ul li span:hover {
     background: #eee;
+}
+
+#app {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+
+#list-category-container {
+    flex: 1;
+    margin-right: 20px;
+}
+
+#tasks-container {
+    flex: 2;
+}
+
+.sidebar {
+    width: 30%;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.list-item {
+    padding: 10px 0;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    background: #fff;
+}
+
+.list-title {
+    font-weight: bold;
+    font-size: 16px;
+    display: block;
+}
+
+.list-date {
+    font-size: 12px;
+    display: block;
+    margin-top: 4px;
+}
+
+.tasks {
+    width: 70%;
+    padding: 20px;
+}
+
+.vertical-line {
+    width: 1px;
+    background-color: #ccc;
+    height: 100vh;
+}
+
+.task {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.task-text {
+    margin-left: 10px;
 }
