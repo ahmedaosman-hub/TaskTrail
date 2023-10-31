@@ -16,10 +16,14 @@
 
       <div class="todo-app">
         <!-- List Categories-->
-        <ul id="list-categories">
-          <li onclick="switchList('cleaning')">Cleaning</li>
-          <li onclick="switchList('car')">Car</li>
-        </ul>
+        <div id="categories-section">
+          <ul id="list-categories">
+            <li onclick="switchList('cleaning')">Cleaning</li>
+            <li onclick="switchList('car')">Car</li>
+          </ul>
+          <button id="new-category-btn" onclick="addNewCategory()">New Category</button>
+        </div>
+
 
 
         <div class="vertical-line"></div>
