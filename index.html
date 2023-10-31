@@ -11,54 +11,26 @@
 
 <body>
   <div class="container">
-    <!-- Sidebar Section -->
-    <section class="sidebar">
-      <div class="list-item">
-        <span class="list-title">List</span>
-        <span class="list-date"> 11/09/2023</span>
+    <div class="todo-app">
+      <h2>To-Do List <img src="images/icon.png" /></h2>
+
+      <!-- List Categories-->
+      <ul id="list-categories">
+        <li onclick="switchList('cleaning')">Cleaning</li>
+        <li onclick="switchList('car')">Car</li>"
+      </ul>
+      <input type="text" id="list-name" placeholder="Add new list name" />
+      <button onclick="addList()">Add List</button>
+
+      <!-- Tasks of the selected -->
+      <div class="row">
+        <input type="text" id="input-box" placeholder="Add your task" />
+        <button onclick="addTask()">Add</button>
       </div>
-    </section>
+      <ul id="list-container">
 
-    <div class="vertical-line"></div>
-
-    <!-- Tasks Section -->
-    <section class="tasks">
-      <header>
-        <h2>List</h2>
-      </header>
-      <div class="task">
-        <input type="checkbox">
-        <span class="task-text">Go to birthday</span>
-      </div>
-    </section>
-
-    <!-- To-Do App Section -->
-    <section class="todo-app">
-      <header>
-        <h2>To-Do List <img src="images/icon.png" alt="To-Do Icon" /></h2>
-      </header>
-      <div id="app">
-
-        <!-- List Categories -->
-        <nav id="list-category-container">
-          <ul id="list-categories">
-            <li onclick="switchList('cleaning')">Cleaning</li>
-            <li onclick="switchList('car')">Car</li>
-          </ul>
-          <input type="text" id="list-name" placeholder="Add new list name" />
-          <button onclick="addList()">Add List</button>
-        </nav>
-
-        <!-- Tasks of the selected list -->
-        <div id="tasks-container">
-          <div class="row">
-            <input type="text" id="input-box" placeholder="Add your task" />
-            <button onclick="addTask()">Add</button>
-          </div>
-          <ul id="list-container"></ul>
-        </div>
-      </div>
-    </section>
+      </ul>
+    </div>
   </div>
 </body>
 

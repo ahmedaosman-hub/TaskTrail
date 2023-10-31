@@ -39,23 +39,6 @@ listContainer.addEventListener(
   false
 );
 
-function addList(listName) {
-  if (!listName) return;
-  const data = loadData();
-
-  if (!data[listName]) {
-    data[listName] = [];
-    saveData(data);
-
-    const li = document.createElement("li");
-    li.textContent = listName.charAt(0).toUpperCase() + listName.slice(1);
-    li.onclick = function () {
-      switchList(listName);
-    };
-    listCategories.appendChild(li);
-  }
-}
-
 function saveData(dataToUpdate) {
   const data = dataToUpdate || loadData();
 
