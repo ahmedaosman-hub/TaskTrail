@@ -15,7 +15,7 @@ body {
     width: 100%;
     min-height: 100vh;
     padding: 10px;
-    background: linear-gradient(135deg, #26532B, #D6F599);
+    background: linear-gradient(135deg, #22223B, #4A4E69);
 }
 
 .todo-app {
@@ -30,7 +30,7 @@ body {
 
 .todo-app h2 {
     justify-content: center;
-    color: #007BFF;
+    color: #000;
     display: flex;
     margin-bottom: 20px;
 }
@@ -63,7 +63,7 @@ button {
     border: none;
     outline: none;
     padding: 16px 50px;
-    background: black;
+    background: #9A8C98;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
@@ -113,6 +113,6 @@ ul li span {
     text-align: center;
 }
 
-ul li span::hover {
+ul li span:hover {
     background: #eee;
 }
