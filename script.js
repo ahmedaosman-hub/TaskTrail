@@ -1,5 +1,5 @@
-let categoriesArray = [];
-let tasksArray = [];
+let categories = [];
+let tasks = [];
 
 // Getting reference to DOM elements
 const inputBox = document.getElementById("input-box");
@@ -15,54 +15,36 @@ function switchList(listName) {
   showTask();
 }
 
-function addItem(type) {
-  // Determine the elements and data based on type
-  let inputElement =
-    type === "task" ? inputBox : document.getElementById("category-input");
-  let listElement =
-    type === "task" ? listTasks : document.getElementById("list-categories");
-  let value = inputElement.value.trim();
-
-  if (value === "") {
-    alert(`Please enter a ${type}.`);
-    return;
-  }
-
-  // Create the item
-  let item = document.createElement("li");
-  item.textContent = value;
-
-  // For tasks, add a delete button
-  if (type === "task") {
-    let span = document.createElement("span");
-    span.textContent = "\u00D7";
-    item.appendChild(span);
-  }
-
-  // Add the item to the list
-  listElement.appendChild(item);
-
-  // Special handling for categories
+function addItem(type, value) {
   if (type === "category") {
-    const data = loadData();
-    if (!data[value]) {
-      data[value] = [];
-      saveData(data);
-    }
-  } else {
-    // Save tasks to local storage
-    saveData();
+    categories.push(value);
+    updateCategoriesDisplay();
+  } else if (type === "task") {
+    tasks.push(value);
+    updateTasksDisplay();
   }
+}
 
-  // Clear the input element
-  inputElement.value = "";
+function updateCategoriesDisplay() {
+  let listElement = document.getElementById("list-categories");
+  listElement.innerHTML = "";
 
-  // Close the modal, if necessary
-  if (type === "category") {
-    closeModal("categoryModal");
-  } else {
-    closeModal("taskModal");
-  }
+  categories.forEach((category) => {
+    let listItem = document.createElement("li");
+    listItem.textContent = category;
+    listElement.appendChild(listItem);
+  });
+}
+
+function updateTaskDisplay() {
+  let listElement = document.getElementById("list-tasks");
+  listElement.innerHTML = ""; // Clear the list
+
+  tasks.forEach((task) => {
+    let listItem = document.createElement("li");
+    listItem.textContent = task;
+    listElement.appendChild(listItem);
+  });
 }
 
 // Event listeners for marking tasks as done and deleting tasks
@@ -237,4 +219,31 @@ function deleteSelectedCategory() {
   }
 
   closeDeleteModal();
+}
+
+function populateDropdown(dropdownId, items) {
+  let dropdown = document.getElementById(dropdownId);
+  dropdown.innerHTML = ""; // Clear the dropdown
+
+  items.forEach((item) => {
+    let option = document.createElement("option");
+    option.value = item;
+    option.textContent = item;
+    dropdown.appendChild(option);
+  });
+}
+
+function deleteSelectedItem(type) {
+  let dropdownId =
+    type === "category" ? "delete-category-dropdown" : "delete-task-dropdown";
+  let dropdown = document.getElementById(dropdownId);
+  let value = dropdown.value; // Get selected value
+
+  if (type === "category") {
+    categories = categories.filter((category) => category !== value);
+    updateCategoryDisplay();
+  } else if (type === "task") {
+    tasks = tasks.filter((task) => task !== value);
+    updateTaskDisplay();
+  }
 }
