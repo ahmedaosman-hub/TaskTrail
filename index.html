@@ -35,7 +35,6 @@
           <ul id="list-tasks"></ul>
           <div class="button-container">
             <button id="new-category-btn" class="custom-btn" onclick="openModal('taskModal')">New Task</button>
-            <button id="delete-category-btn" class="custom-btn" onclick="openDeleteModal()">Delete Task</button>
           </div>
           <ul id="list-container"></ul>
         </div>
@@ -81,16 +80,5 @@
     </div>
   </div>
 
-  <div id="deleteTaskModal" class="modal">
-    <div class="modal-content">
-      <h3>Delete Task</h3>
-      <select id="delete-task-dropdown"></select>
-      <div class="modal-buttons">
-        <button onclick="closeDeleteModal()">Cancel</button>
-        <button onclick="deleteSelectedTask()">Delete</button>
-      </div>
-    </div>
-  </div>
-</body>
 
 </html>

@@ -238,3 +238,86 @@ function deleteSelectedItem(type) {
     deleteSelectedTask();
   }
 }
+
+// Function to open a modal by its ID
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.style.display = "flex";
+}
+
+// Function to close a modal by its ID
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
+  modal.style.display = "none";
+}
+
+// Function to add a new item (task or category) and close the modal
+function addItem(type) {
+  const inputBox = document.getElementById(
+    type === "task" ? "task-input" : "category-input"
+  );
+  const listContainer = document.getElementById(
+    type === "task" ? "list-tasks" : "list-categories"
+  );
+
+  if (inputBox.value.trim() === "") {
+    alert("Please enter a " + (type === "task" ? "task" : "category") + ".");
+    return;
+  }
+
+  let li = document.createElement("li");
+  li.innerHTML = inputBox.value;
+  listContainer.appendChild(li);
+
+  // Add a delete button to the item
+  let span = document.createElement("span");
+  span.innerHTML = "\u00D7";
+  li.appendChild(span);
+
+  // Clear the input box
+  inputBox.value = "";
+
+  // Save tasks or categories to local storage
+  saveData();
+
+  // Close the modal
+  closeModal(type === "task" ? "taskModal" : "categoryModal");
+}
+
+// Function to open the delete task modal
+function openDeleteTaskModal() {
+  const deleteTaskModal = document.getElementById("deleteTaskModal");
+  deleteTaskModal.style.display = "flex";
+}
+
+// Function to populate the delete task modal's dropdown with tasks from the selected category
+function populateDeleteTaskDropdown() {
+  const deleteTaskDropdown = document.getElementById("delete-task-dropdown");
+  const selectedCategory = document.getElementById(
+    "delete-category-dropdown"
+  ).value;
+
+  // Load the data from local storage
+  const data = loadData();
+
+  // Clear existing options
+  deleteTaskDropdown.innerHTML = "";
+
+  // Populate the dropdown with tasks from the selected category
+  const tasks = data[selectedCategory] || [];
+  tasks.forEach((taskName) => {
+    let option = document.createElement("option");
+    option.value = taskName;
+    option.textContent = taskName;
+    deleteTaskDropdown.appendChild(option);
+  });
+}
+
+// Function to open the delete task modal and populate the dropdown with tasks
+function openDeleteTaskModal() {
+  // Populate the delete task modal's dropdown with tasks from the selected category
+  populateDeleteTaskDropdown();
+
+  const deleteTaskModal = document.getElementById("deleteTaskModal");
+  deleteTaskModal.style.display = "flex";
+}
