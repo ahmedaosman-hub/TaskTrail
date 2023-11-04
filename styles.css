@@ -149,19 +149,18 @@ ul li span:hover {
 }
 
 /* Styling for the categories section */
-#list-categories,
-#list-tasks {
+#list-categories {
     flex: 1;
     margin-right: 20px;
 }
 
 /* Styling for the tasks list container */
-#list-tasks {
+#list-container {
     flex: 2;
 }
 
 /* Adjusting margin for the header inside the task container */
-#list-tasks h2 {
+#list-container h2 {
     margin-bottom: 20px;
 }
 
