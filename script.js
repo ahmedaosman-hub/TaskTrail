@@ -223,3 +223,9 @@ function updateTaskDisplay() {
     tasksList.appendChild(li);
   });
 }
+
+// Function to toggle the visibility of a modal
+function toggleModal(modalId, isVisible) {
+  const modal = document.getElementById(modalId);
+  modal.style.display = isVisible ? "flex" : "none";
+}
