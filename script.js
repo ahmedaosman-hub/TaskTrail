@@ -1,249 +1,117 @@
 let categories = [];
 let tasks = [];
 
-// Getting reference to DOM elements
-const inputBox = document.getElementById("input-box");
+// References to DOM elements
 const listTasks = document.getElementById("list-tasks");
 const listCategories = document.getElementById("list-categories");
 
-// The currently active list
-let currentList = "default";
+let currentList = "default"; // The name of the currently active task list
 
-// Switch to a different task list
+// Switches to a specified task list and refreshes the view
 function switchList(listName) {
   currentList = listName;
-  showTask();
+  showTask(); // Assumes this function displays tasks for the current list
 }
 
+// Adds an item to the respective list and updates the UI accordingly
 function addItem(type, value) {
   if (type === "category") {
     categories.push(value);
-    updateCategoriesDisplay();
+    updateCategoriesDisplay(); // Update the category display after adding a new category
   } else if (type === "task") {
     tasks.push(value);
-    updateTasksDisplay();
+    updateTaskDisplay(); // Update the task display after adding a new task
   }
 }
 
-function updateCategoriesDisplay() {
-  let listElement = document.getElementById("list-categories");
+// Updates the display by refreshing the list UI of the specified type
+function updateDisplay(type) {
+  let listElement = type === "category" ? listCategories : listTasks;
+  let items = type === "category" ? categories : tasks;
+
+  // Clear and repopulate the list to reflect current state
   listElement.innerHTML = "";
-
-  categories.forEach((category) => {
+  items.forEach((item) => {
     let listItem = document.createElement("li");
-    listItem.textContent = category;
+    listItem.textContent = item;
     listElement.appendChild(listItem);
   });
 }
 
-function updateTaskDisplay() {
-  let listElement = document.getElementById("list-tasks");
-  listElement.innerHTML = ""; // Clear the list
+// Handles UI interactions for tasks, such as marking as done or deleting
+listTasks.addEventListener("click", function (e) {
+  if (e.target.tagName === "LI") {
+    // Toggle the completed state of the task
+    e.target.classList.toggle("checked");
+  } else if (e.target.tagName === "SPAN") {
+    // Remove the task from the list
+    e.target.parentElement.remove();
+  }
+  saveData(); // Persist changes to local storage
+});
 
-  tasks.forEach((task) => {
-    let listItem = document.createElement("li");
-    listItem.textContent = task;
-    listElement.appendChild(listItem);
-  });
-}
-
-// Event listeners for marking tasks as done and deleting tasks
-listTasks.addEventListener(
-  "click",
-  function (e) {
-    if (e.target.tagName === "LI") {
-      e.target.classList.toggle("checked");
-      saveData();
-    } else if (e.target.tagName === "SPAN") {
-      e.target.parentElement.remove();
-      saveData();
-    }
-  },
-  false
-);
-
-// Save tasks to local storage
+// Persists the current state of tasks or categories to local storage
 function saveData(dataToUpdate) {
   const data = dataToUpdate || loadData();
-
-  // If there's no data to update, save the current list's tasks
   if (!dataToUpdate) {
-    data[currentList] = Array.from(listTasks.children).map(
-      (li) => li.firstChild.textContent
-    );
+    data[currentList] = tasks; // Save the current tasks if no data to update
   }
-
   localStorage.setItem("data", JSON.stringify(data));
 }
 
-// Load tasks from local storage
+// Retrieves stored tasks or categories from local storage
 function loadData() {
   const storedData = localStorage.getItem("data");
   return storedData ? JSON.parse(storedData) : {};
 }
 
-// Display tasks of the active list
-function showTask() {
-  listTasks.innerHTML = "";
-  const data = loadData();
-  const tasks = data[currentList] || [];
-
-  tasks.forEach((taskName) => {
-    let li = document.createElement("li");
-    li.innerHTML = taskName;
-
-    let span = document.createElement("span");
-    span.innerHTML = "\u00D7";
-    li.appendChild(span);
-
-    listTasks.appendChild(li);
-  });
+function updateCategoriesDisplay() {
+  updateDisplay("category");
 }
 
-// Initialization function to populate categories and tasks
+// Updates the tasks display
+function updateTaskDisplay() {
+  updateDisplay("task");
+}
+
+// Initialization to populate the UI with stored categories and tasks
 (function init() {
   const data = loadData();
-
-  for (let categoryName in data) {
-    addCategoryToList(categoryName);
+  // Populate categories and tasks from stored data
+  categories = Object.keys(data); // Assumes keys in data are category names
+  if (data[currentList]) {
+    tasks = data[currentList];
   }
-
-  showTask();
+  updateCategoriesDisplay();
+  updateTaskDisplay();
 })();
 
-function openModal(modalId) {
-  const modal = document.getElementById(modalId);
-  if (modal) {
-    modal.style.display = "flex";
-  } else {
-    console.error(`Modal with ID ${modalId} not found.`);
-  }
-}
-
-// Close the new category modal
-function closeModal(modalId) {
-  var modal = document.getElementById(modalId);
-  if (modal) {
-    modal.style.display = "none";
-  } else {
-    console.error("Modal with ID" + modalId + "not found");
-  }
-}
-
+// Opens a modal dialog
 function toggleModal(modalId, shouldOpen) {
   const modal = document.getElementById(modalId);
   if (modal) {
     modal.style.display = shouldOpen ? "flex" : "none";
   } else {
-    console.error("Modal with ID ${modalId} not found.");
-  }
-}
-// Populate dropdown with existing categories
-function populateDropdown() {
-  const dropdown = document.getElementById("delete-category-dropdown");
-  const data = loadData();
-
-  dropdown.innerHTML = "";
-  for (let categoryName in data) {
-    let option = document.createElement("option");
-    option.value = categoryName;
-    option.textContent = categoryName;
-    dropdown.appendChild(option);
+    console.error(`Modal with ID ${modalId} not found.`);
   }
 }
 
-// Delete the selected category
-function deleteSelectedCategory() {
-  const dropdown = document.getElementById("delete-category-dropdown");
-  const selectedCategory = dropdown.value;
-
-  // Remove category from local storage
-  const data = loadData();
-  delete data[selectedCategory];
-  saveData(data);
-
-  // Remove category from the category list
-  const categoriesList = document.getElementById("list-categories");
-  Array.from(categoriesList.children).forEach((li) => {
-    if (li.textContent === selectedCategory) {
-      li.remove();
-    }
-  });
-
-  // Switch to default list if deleted category was active
-  if (currentList === selectedCategory) {
-    currentList = "default";
-    showTask();
-  }
-
-  /**
-   * Populates a dropdown with options.
-   *
-   * @param {string} dropdownId - The ID of the dropdown element to populate.
-   * @param {Array} options - An array of options. Each option can be a string or an object with 'value' and 'text' properties.
-   */
-  function populateDropdown(dropdownId, options) {
-    const dropdown = document.getElementById(dropdownId);
-
-    if (!dropdown) {
-      console.error(`Dropdown with ID ${dropdownId} not found.`);
-      return;
-    }
-
-    // Clear existing options
-    dropdown.innerHTML = "";
-
-    // Populate the dropdown with new options
-    options.forEach((option) => {
-      const opt = document.createElement("option");
-
-      if (typeof option === "string") {
-        opt.value = option;
-        opt.textContent = option;
-      } else if (
-        typeof option === "object" &&
-        option.value !== undefined &&
-        option.text !== undefined
-      ) {
-        opt.value = option.value;
-        opt.textContent = option.text;
-      } else {
-        console.error(
-          "Option format is incorrect. It should be a string or an object with value and text properties."
-        );
-        return;
-      }
-
-      dropdown.appendChild(opt);
-    });
-  }
-
-  closeDeleteModal();
-}
-
-function populateDropdown(dropdownId, items) {
-  let dropdown = document.getElementById(dropdownId);
-  dropdown.innerHTML = ""; // Clear the dropdown
-
-  items.forEach((item) => {
-    let option = document.createElement("option");
-    option.value = item;
-    option.textContent = item;
-    dropdown.appendChild(option);
-  });
-}
-
+// Deletes the selected item from either categories or tasks and updates the display
 function deleteSelectedItem(type) {
   let dropdownId =
     type === "category" ? "delete-category-dropdown" : "delete-task-dropdown";
   let dropdown = document.getElementById(dropdownId);
-  let value = dropdown.value; // Get selected value
+  let value = dropdown.value; // Get the selected value to delete
 
   if (type === "category") {
     categories = categories.filter((category) => category !== value);
-    updateCategoryDisplay();
+    updateCategoriesDisplay(); // Reflect changes in the category UI
   } else if (type === "task") {
     tasks = tasks.filter((task) => task !== value);
-    updateTaskDisplay();
+    updateTaskDisplay(); // Reflect changes in the task UI
   }
+
+  saveData(); // Persist the deletion to local storage
 }
+
+// Further functions related to modals, category management, etc. can be added below.

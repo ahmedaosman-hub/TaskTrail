@@ -15,35 +15,36 @@
       <h2 class="title">To-Do List <img src="images/icon.png" /></h2>
 
       <div class="todo-app">
-        <!-- List Categories-->
+        <!-- List Categories -->
         <div id="categories-section">
           <h2 class="title">Categories</h2>
           <ul id="list-categories">
+            <!-- Categories will be populated here by JavaScript -->
           </ul>
           <div class="button-container">
-            <button id="new-category-btn" class="custom-btn" onclick="openModal('categoryModal')">New Category</button>
-            <button id="delete-category-btn" class="custom-btn" onclick="openDeleteModal()">Delete Category</button>
+            <button id="new-category-btn" class="custom-btn" onclick="toggleModal('categoryModal', true)">New
+              Category</button>
+            <button id="delete-category-btn" class="custom-btn"
+              onclick="toggleModal('deleteCategoryModal', true)">Delete Category</button>
           </div>
-
         </div>
-
-
 
         <div class="vertical-line"></div>
 
         <!-- Tasks of the selected category -->
         <div id="tasks-section">
           <h2 class="title">Tasks</h2>
-          <ul id="list-tasks"></ul>
+          <ul id="list-tasks">
+            <!-- Tasks will be populated here by JavaScript -->
+          </ul>
           <div class="button-container">
-            <button id="new-category-btn" class="custom-btn" onclick="openModal('taskModal')">New Task</button>
-            <button id="delete-category-btn" class="custom-btn" onclick="openDeleteModal()">Delete Task</button>
+            <button id="new-task-btn" class="custom-btn" onclick="toggleModal('taskModal', true)">New Task</button>
+            <button id="delete-task-btn" class="custom-btn" onclick="toggleModal('deleteTaskModal', true)">Delete
+              Task</button>
           </div>
         </div>
       </div>
-
     </div>
-  </div>
   </div>
 
   <div id="categoryModal" class="modal">
@@ -51,19 +52,22 @@
       <h3>New Category</h3>
       <input type="text" id="category-input" placeholder="Category Name" />
       <div class="modal-buttons">
-        <button onclick="closeModal('categoryModal')">Cancel</button>
-        <button onclick="addItem('category')">OK</button>
-
+        <button onclick="toggleModal('categoryModal', false)">Cancel</button>
+        <button
+          onclick="addItem('category', document.getElementById('category-input').value); toggleModal('categoryModal', false);">OK</button>
       </div>
     </div>
   </div>
+
   <div id="deleteCategoryModal" class="modal">
     <div class="modal-content">
       <h3>Delete Category</h3>
-      <select id="delete-category-dropdown"></select>
+      <select id="delete-category-dropdown">
+        <!-- Options will be populated here by JavaScript -->
+      </select>
       <div class="modal-buttons">
-        <button onclick="closeDeleteModal()">Cancel</button>
-        <button onclick="deleteSelectedCategory()">Delete</button>
+        <button onclick="toggleModal('deleteCategoryModal', false)">Cancel</button>
+        <button onclick="deleteSelectedItem('category')">Delete</button>
       </div>
     </div>
   </div>
@@ -73,9 +77,9 @@
       <h3>New Task</h3>
       <input type="text" id="task-input" placeholder="Task Name" />
       <div class="modal-buttons">
-        <button onclick="closeModal('taskModal')">Cancel</button>
-        <button onclick="addItem('task')">OK</button>
-
+        <button onclick="toggleModal('taskModal', false)">Cancel</button>
+        <button
+          onclick="addItem('task', document.getElementById('task-input').value); toggleModal('taskModal', false);">OK</button>
       </div>
     </div>
   </div>
@@ -83,10 +87,12 @@
   <div id="deleteTaskModal" class="modal">
     <div class="modal-content">
       <h3>Delete Task</h3>
-      <select id="delete-task-dropdown"></select>
+      <select id="delete-task-dropdown">
+        <!-- Options will be populated here by JavaScript -->
+      </select>
       <div class="modal-buttons">
-        <button onclick="closeDeleteModal()">Cancel</button>
-        <button onclick="deleteSelectedTask()">Delete</button>
+        <button onclick="toggleModal('deleteTaskModal', false)">Cancel</button>
+        <button onclick="deleteSelectedItem('task')">Delete</button>
       </div>
     </div>
   </div>
