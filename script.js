@@ -229,3 +229,12 @@ function toggleModal(modalId, isVisible) {
   const modal = document.getElementById(modalId);
   modal.style.display = isVisible ? "flex" : "none";
 }
+
+// Function to delete the selected item (category or task)
+function deleteSelectedItem(type) {
+  if (type === "category") {
+    deleteSelectedCategory();
+  } else if (type === "task") {
+    deleteSelectedTask();
+  }
+}
