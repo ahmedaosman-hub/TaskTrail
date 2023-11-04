@@ -1,6 +1,9 @@
+let categoriesArray = [];
+let tasksArray = [];
+
 // Getting reference to DOM elements
 const inputBox = document.getElementById("input-box");
-const listContainer = document.getElementById("list-container");
+const listTasks = document.getElementById("list-tasks");
 const listCategories = document.getElementById("list-categories");
 
 // The currently active list
@@ -12,31 +15,58 @@ function switchList(listName) {
   showTask();
 }
 
-// Add a new task to the active list
-function addTask() {
-  if (inputBox.value.trim() === "") {
-    alert("Please enter a task.");
+function addItem(type) {
+  // Determine the elements and data based on type
+  let inputElement =
+    type === "task" ? inputBox : document.getElementById("category-input");
+  let listElement =
+    type === "task" ? listTasks : document.getElementById("list-categories");
+  let value = inputElement.value.trim();
+
+  if (value === "") {
+    alert(`Please enter a ${type}.`);
     return;
   }
 
-  let li = document.createElement("li");
-  li.innerHTML = inputBox.value;
-  listContainer.appendChild(li);
+  // Create the item
+  let item = document.createElement("li");
+  item.textContent = value;
 
-  // Add a delete button to the task
-  let span = document.createElement("span");
-  span.innerHTML = "\u00D7";
-  li.appendChild(span);
+  // For tasks, add a delete button
+  if (type === "task") {
+    let span = document.createElement("span");
+    span.textContent = "\u00D7";
+    item.appendChild(span);
+  }
 
-  // Clear the input box
-  inputBox.value = "";
+  // Add the item to the list
+  listElement.appendChild(item);
 
-  // Save tasks to local storage
-  saveData();
+  // Special handling for categories
+  if (type === "category") {
+    const data = loadData();
+    if (!data[value]) {
+      data[value] = [];
+      saveData(data);
+    }
+  } else {
+    // Save tasks to local storage
+    saveData();
+  }
+
+  // Clear the input element
+  inputElement.value = "";
+
+  // Close the modal, if necessary
+  if (type === "category") {
+    closeModal("categoryModal");
+  } else {
+    closeModal("taskModal");
+  }
 }
 
 // Event listeners for marking tasks as done and deleting tasks
-listContainer.addEventListener(
+listTasks.addEventListener(
   "click",
   function (e) {
     if (e.target.tagName === "LI") {
@@ -56,7 +86,7 @@ function saveData(dataToUpdate) {
 
   // If there's no data to update, save the current list's tasks
   if (!dataToUpdate) {
-    data[currentList] = Array.from(listContainer.children).map(
+    data[currentList] = Array.from(listTasks.children).map(
       (li) => li.firstChild.textContent
     );
   }
@@ -72,7 +102,7 @@ function loadData() {
 
 // Display tasks of the active list
 function showTask() {
-  listContainer.innerHTML = "";
+  listTasks.innerHTML = "";
   const data = loadData();
   const tasks = data[currentList] || [];
 
@@ -84,7 +114,7 @@ function showTask() {
     span.innerHTML = "\u00D7";
     li.appendChild(span);
 
-    listContainer.appendChild(li);
+    listTasks.appendChild(li);
   });
 }
 
@@ -99,57 +129,33 @@ function showTask() {
   showTask();
 })();
 
-// Open the new category modal
-function addNewCategory() {
-  document.getElementById("categoryModal").style.display = "flex";
-}
-
-// Close the new category modal
-function closeModal() {
-  document.getElementById("categoryModal").style.display = "none";
-}
-
-// Add a new category
-function addCategory() {
-  var categoryName = document.getElementById("category-input").value;
-  if (categoryName) {
-    addCategoryToList(categoryName);
-
-    const data = loadData();
-    if (!data[categoryName]) {
-      data[categoryName] = [];
-      saveData(data);
-    }
-
-    document.getElementById("category-input").value = "";
-    closeModal();
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = "flex";
   } else {
-    alert("Please enter a category name.");
+    console.error(`Modal with ID ${modalId} not found.`);
   }
 }
 
-// Add a category to the category list
-function addCategoryToList(categoryName) {
-  var ul = document.getElementById("list-categories");
-  var li = document.createElement("li");
-  li.textContent = categoryName;
-  li.onclick = function () {
-    switchList(categoryName);
-  };
-  ul.appendChild(li);
+// Close the new category modal
+function closeModal(modalId) {
+  var modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = "none";
+  } else {
+    console.error("Modal with ID" + modalId + "not found");
+  }
 }
 
-// Open the delete category modal and populate dropdown with categories
-function openDeleteModal() {
-  populateDropdown();
-  document.getElementById("deleteCategoryModal").style.display = "flex";
+function toggleModal(modalId, shouldOpen) {
+  const modal = document.getElementById(modalId);
+  if (modal) {
+    modal.style.display = shouldOpen ? "flex" : "none";
+  } else {
+    console.error("Modal with ID ${modalId} not found.");
+  }
 }
-
-// Close the delete category modal
-function closeDeleteModal() {
-  document.getElementById("deleteCategoryModal").style.display = "none";
-}
-
 // Populate dropdown with existing categories
 function populateDropdown() {
   const dropdown = document.getElementById("delete-category-dropdown");
@@ -186,6 +192,48 @@ function deleteSelectedCategory() {
   if (currentList === selectedCategory) {
     currentList = "default";
     showTask();
+  }
+
+  /**
+   * Populates a dropdown with options.
+   *
+   * @param {string} dropdownId - The ID of the dropdown element to populate.
+   * @param {Array} options - An array of options. Each option can be a string or an object with 'value' and 'text' properties.
+   */
+  function populateDropdown(dropdownId, options) {
+    const dropdown = document.getElementById(dropdownId);
+
+    if (!dropdown) {
+      console.error(`Dropdown with ID ${dropdownId} not found.`);
+      return;
+    }
+
+    // Clear existing options
+    dropdown.innerHTML = "";
+
+    // Populate the dropdown with new options
+    options.forEach((option) => {
+      const opt = document.createElement("option");
+
+      if (typeof option === "string") {
+        opt.value = option;
+        opt.textContent = option;
+      } else if (
+        typeof option === "object" &&
+        option.value !== undefined &&
+        option.text !== undefined
+      ) {
+        opt.value = option.value;
+        opt.textContent = option.text;
+      } else {
+        console.error(
+          "Option format is incorrect. It should be a string or an object with value and text properties."
+        );
+        return;
+      }
+
+      dropdown.appendChild(opt);
+    });
   }
 
   closeDeleteModal();
